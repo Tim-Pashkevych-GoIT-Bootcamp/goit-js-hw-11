@@ -6,8 +6,11 @@ import photoCardTemplate from './photo-card-template.js';
 
 const refs = {
   formElement: document.querySelector('#search-form'),
+  searchQueryElement: document.querySelector('input[name="searchQuery"]'),
+  submitBtnElement: document.querySelector('button[type="submit"]'),
   galleryElement: document.querySelector('.gallery'),
   loadMoreBtnElement: document.querySelector('button.load-more'),
+  backdropElement: document.querySelector('.backdrop'),
 };
 
 // Initialize SimpleLightbox
@@ -15,6 +18,12 @@ const gallery = new SimpleLightbox('.gallery a');
 
 // Create new object to handle all requests
 const pixabayApi = new PixabayApi();
+
+// Create observer
+const observer = new IntersectionObserver(observeLoadMoreBtn, {
+  rootMargin: '200px',
+  threshold: 1.0,
+});
 
 /**
   |============================
@@ -30,6 +39,9 @@ async function processRequest(query, page) {
     if (page === 1) {
       // Display Total Found message only when we are on the first page
       Notify.success(`Hooray! We found ${pixabayApi.total} images.`);
+
+      // Add observer if Scroll Mode enabled
+      observer.observe(refs.loadMoreBtnElement);
     }
 
     // Insert new Images to the content
@@ -41,25 +53,18 @@ async function processRequest(query, page) {
     // Reinitilize the lightbox
     gallery.refresh();
 
-    // Scroll page only when we load second and any other page
-    if (page !== 1) {
-      scroll();
-    }
-
-    // Check if we have reached the last page
+    // If we have reached the last page, then show message and remove observer
     if (pixabayApi.page >= pixabayApi.lastPage) {
-      hideLoadMoreBtn();
-
-      // Throw error message
       throw new Error(
         "We're sorry, but you've reached the end of search results."
       );
-    } else {
-      showLoadMoreBtn();
     }
   } catch (error) {
     // Show Error message
     Notify.failure(error.message);
+
+    // Remove observer
+    observer.unobserve(refs.loadMoreBtnElement);
   }
 }
 
@@ -71,26 +76,13 @@ async function processRequest(query, page) {
 // Function to clear content
 function clearContent() {
   refs.galleryElement.innerHTML = '';
-
-  //Hide Load More button
-  hideLoadMoreBtn();
 }
-// Function to Show Load More button
-function showLoadMoreBtn() {
-  refs.loadMoreBtnElement.classList.remove('is-hidden');
-}
-// Function to Hide Load More button
-function hideLoadMoreBtn() {
-  refs.loadMoreBtnElement.classList.add('is-hidden');
-}
-// Function to scroll page
-function scroll() {
-  const { height: cardHeight } =
-    refs.galleryElement.firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: window.innerHeight - cardHeight,
-    behavior: 'smooth',
+function observeLoadMoreBtn(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Send request to the server and render HTML
+      processRequest(null, pixabayApi.page + 1);
+    }
   });
 }
 
@@ -108,18 +100,9 @@ function onFormSubmit(event) {
   // Clear content
   clearContent();
 
+  // Remove observer
+  observer.unobserve(refs.loadMoreBtnElement);
+
   // Send request to the server and render HTML
   processRequest(event.target.elements.searchQuery.value, 1);
-}
-
-/**
-  |============================
-  | Add Event Listener for Load More button
-  |============================
-*/
-refs.loadMoreBtnElement.addEventListener('click', onLoadMoreBtnClick);
-
-function onLoadMoreBtnClick(event) {
-  // Send request to the server and render HTML
-  processRequest(null, pixabayApi.page + 1);
 }
