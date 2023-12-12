@@ -3,16 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <title>Homework 10</title>
+    <title>Homework 11</title>
+    <!-- CSS styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css"
+      integrity="sha512-4xo8blKMVCiXpTaLzQSLSw3KFOVPWhm/TRtuPVc4WG6kUgjH6J03IBuG7JZPkcWMxJ5huwaBpOpnwYElP/m6wg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <select id="breed-select-id" class="breed-select hidden"></select>
-    <p class="loader hidden">Loading data, please wait...</p>
-    <p class="error hidden">
-      Oops! Something went wrong! Try reloading the page!
-    </p>
-    <div class="cat-info"></div>
+    <header>
+      <form class="search-form" id="search-form">
+        <label id="scroll-mode-field"
+          ><input id="scroll-mode" type="checkbox" name="scrollMode" /> Scroll
+          mode</label
+        >
+        <input
+          class="form-input"
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit" class="btn">Search</button>
+      </form>
+    </header>
+    <main>
+      <div class="container">
+        <!-- Gallery -->
+        <div class="gallery"></div>
+        <!-- Load more button -->
+        <div class="load-more-container">
+          <button type="button" class="load-more is-hidden">Load more</button>
+        </div>
+      </div>
+    </main>
 
     <script src="./js/index.js" type="module"></script>
   </body>

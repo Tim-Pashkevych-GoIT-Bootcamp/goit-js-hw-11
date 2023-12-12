@@ -1,0 +1,237 @@
+/* Reset Start */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: currentColor;
+  text-decoration: none;
+  scroll-behavior: smooth;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  /* height: auto; */
+}
+
+.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/**
+  |============================
+  | Header
+  |============================
+*/
+header {
+  position: fixed;
+  width: 100%;
+  z-index: 998;
+
+  text-align: center;
+  padding: 25px 0px;
+  background-color: #6262b5;
+  box-shadow: inset 10px 10px 35px #535380;
+}
+.form-input {
+  color: #7a7a7a;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.form-input:focus {
+  outline-color: #ccc;
+}
+.btn {
+  color: white;
+  padding: 5px 10px;
+
+  background-color: #bcb326;
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 7px 7px 25px #e7db1c;
+}
+.btn:hover,
+.btn:focus {
+  background-color: #ddd334;
+  box-shadow: inset 7px 7px 25px #e7db1c;
+}
+
+main {
+  position: relative;
+  top: 90px;
+}
+
+/**
+  |============================
+  | Gallery
+  |============================
+*/
+.gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.photo-card {
+  width: calc((100% - 3 * 30px) / 4);
+  box-shadow: inset 1px 1px 5px #989898;
+  /* filter: drop-shadow(-1px -1px 5px #989898); */
+  border: outset 1px #fffefe;
+}
+.photo-card:hover {
+  cursor: pointer;
+  border: outset 1px #bfbfbf;
+  /* filter: drop-shadow(-1px -1px 5px #464646); */
+}
+
+.photo-card:hover img {
+  filter: drop-shadow(-2px -2px 5px #464646);
+}
+
+.photo-card .image {
+  height: 230px;
+  position: relative;
+  /* background-color: rgba(46, 47, 66, 0.8); */
+}
+.photo-card .image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  filter: drop-shadow(-2px -2px 5px #989898);
+}
+.photo-card .image img:hover {
+  filter: drop-shadow(-2px -2px 5px #464646);
+}
+.photo-card .info {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.photo-card .info p {
+  width: calc((100% - 3 * 3px) / 4);
+  text-align: center;
+  font-size: 12px;
+  padding: 10px 0;
+}
+.photo-card .info p span {
+  display: block;
+  padding-top: 5px;
+}
+
+/* Load More button */
+.load-more-container {
+  margin: 20px;
+  text-align: center;
+}
+
+button.load-more {
+  color: white;
+  padding: 5px 10px;
+  margin-bottom: 50px;
+
+  background-color: #4926bc;
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 7px 7px 25px #4926bc;
+}
+button.load-more:hover,
+button.load-more:focus {
+  background-color: #6c50c9;
+  box-shadow: inset 7px 7px 25px #6c50c9;
+}
+
+/**
+  |============================
+  | Backdrop
+  |============================
+*/
+.loader {
+  color: black;
+  font-size: 45px;
+  text-indent: -9999em;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transform: translateZ(0);
+  animation: mltShdSpin 1.7s infinite ease, round 1.7s infinite ease;
+}
+
+@keyframes mltShdSpin {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em,
+      -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em,
+      -0.297em -0.775em 0 -0.477em;
+  }
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+}
+
+@keyframes round {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
