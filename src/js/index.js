@@ -22,7 +22,7 @@ const pixabayApi = new PixabayApi();
 
 // Create observer
 const observer = new IntersectionObserver(observeLoadMoreBtn, {
-  rootMargin: '300px',
+  rootMargin: '100px',
   threshold: 1.0,
 });
 
@@ -31,60 +31,60 @@ const observer = new IntersectionObserver(observeLoadMoreBtn, {
   | Function to Process Request
   |============================
 */
-function processRequest(query, page) {
+async function processRequest(query, page) {
   // Send request to a server
-  pixabayApi
-    .fetchPhotos(query, page)
-    .then(photos => {
-      if (page === 1) {
-        // Display Total Found message only when we are on the first page
-        Notify.success(`Hooray! We found ${pixabayApi.total} images.`);
+  try {
+    // Fetch Photos from a server
+    const photos = await pixabayApi.fetchPhotos(query, page);
 
-        // Add observer if Scroll Mode enabled
-        if (refs.scrollModeElement.checked) {
-          observer.observe(refs.loadMoreBtnElement);
-        }
-      }
+    if (page === 1) {
+      // Display Total Found message only when we are on the first page
+      Notify.success(`Hooray! We found ${pixabayApi.total} images.`);
 
-      // Insert new Images to the content
-      refs.galleryElement.insertAdjacentHTML(
-        'beforeend',
-        photos.map(photoCardTemplate).join('')
-      );
-
-      // Reinitilize the lightbox
-      gallery.refresh();
-
-      // If we have reached the last page, then remove observer
-      if (pixabayApi.page > pixabayApi.lastPage) {
-        throw new Error(
-          "We're sorry, but you've reached the end of search results."
-        );
-      }
-
-      // Show/Hide Load More button if Scroll Mode disabled
-      if (!refs.scrollModeElement.checked) {
-        // Scroll page only when we load second and any other page
-        if (page !== 1) {
-          scroll();
-        }
-        // Check if we need to show/hide Load More button
-        if (pixabayApi.page !== pixabayApi.lastPage) {
-          showLoadMoreBtn();
-        } else {
-          hideLoadMoreBtn();
-        }
-      }
-    })
-    .catch(error => {
-      // Show Error message
-      Notify.failure(error.message);
-
-      // Remove observer if Scroll Mode enabled
+      // Add observer if Scroll Mode enabled
       if (refs.scrollModeElement.checked) {
-        observer.unobserve(refs.loadMoreBtnElement);
+        observer.observe(refs.loadMoreBtnElement);
       }
-    });
+    }
+
+    // Insert new Images to the content
+    refs.galleryElement.insertAdjacentHTML(
+      'beforeend',
+      photos.map(photoCardTemplate).join('')
+    );
+
+    // Reinitilize the lightbox
+    gallery.refresh();
+
+    // Show/Hide Load More button if Scroll Mode disabled
+    if (!refs.scrollModeElement.checked) {
+      // Scroll page only when we load second and any other page
+      if (page !== 1) {
+        scroll();
+      }
+      // Check if we need to show/hide Load More button
+      if (pixabayApi.page >= pixabayApi.lastPage) {
+        hideLoadMoreBtn();
+      } else {
+        showLoadMoreBtn();
+      }
+    }
+
+    // If we have reached the last page, then show message and remove observer
+    if (pixabayApi.page >= pixabayApi.lastPage) {
+      throw new Error(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
+  } catch (error) {
+    // Show Error message
+    Notify.failure(error.message);
+
+    // Remove observer if Scroll Mode enabled
+    if (refs.scrollModeElement.checked) {
+      observer.unobserve(refs.loadMoreBtnElement);
+    }
+  }
 }
 
 /**
