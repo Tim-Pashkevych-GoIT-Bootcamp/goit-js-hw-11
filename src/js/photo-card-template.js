@@ -1,4 +1,4 @@
-export default photoCardTemplate = ({
+const photoCardTemplate = ({
   webformatURL,
   largeImageURL,
   tags,
@@ -24,3 +24,5 @@ export default photoCardTemplate = ({
       </p>
     </div>
   </a>`;
+
+export default photoCardTemplate;
